@@ -38,7 +38,10 @@ const Auth = () => {
           title: 'Success',
           description: isLogin ? 'Signed in successfully!' : 'Account created successfully!',
         });
-        navigate('/admin');
+        // Navigate to admin immediately after successful auth
+        setTimeout(() => {
+          navigate('/admin');
+        }, 500);
       }
     } catch (error) {
       toast({

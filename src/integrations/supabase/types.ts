@@ -9,6 +9,159 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      blog_posts: {
+        Row: {
+          author: string
+          category: string
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          user_id: string
+          views: number | null
+        }
+        Insert: {
+          author: string
+          category: string
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+          views?: number | null
+        }
+        Update: {
+          author?: string
+          category?: string
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+          views?: number | null
+        }
+        Relationships: []
+      }
+      case_studies: {
+        Row: {
+          challenge: string
+          client: string
+          created_at: string | null
+          duration: string | null
+          id: string
+          image_url: string | null
+          industry: string
+          solution: string
+          status: string | null
+          technologies: string[] | null
+          testimonial: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          challenge: string
+          client: string
+          created_at?: string | null
+          duration?: string | null
+          id?: string
+          image_url?: string | null
+          industry: string
+          solution: string
+          status?: string | null
+          technologies?: string[] | null
+          testimonial?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          challenge?: string
+          client?: string
+          created_at?: string | null
+          duration?: string | null
+          id?: string
+          image_url?: string | null
+          industry?: string
+          solution?: string
+          status?: string | null
+          technologies?: string[] | null
+          testimonial?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      job_postings: {
+        Row: {
+          applications_count: number | null
+          benefits: string[] | null
+          created_at: string | null
+          department: string
+          description: string
+          experience: string | null
+          id: string
+          location: string
+          requirements: string[] | null
+          salary: string | null
+          status: string | null
+          title: string
+          type: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          applications_count?: number | null
+          benefits?: string[] | null
+          created_at?: string | null
+          department: string
+          description: string
+          experience?: string | null
+          id?: string
+          location: string
+          requirements?: string[] | null
+          salary?: string | null
+          status?: string | null
+          title: string
+          type?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          applications_count?: number | null
+          benefits?: string[] | null
+          created_at?: string | null
+          department?: string
+          description?: string
+          experience?: string | null
+          id?: string
+          location?: string
+          requirements?: string[] | null
+          salary?: string | null
+          status?: string | null
+          title?: string
+          type?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string | null
@@ -33,6 +186,48 @@ export type Database = {
           id?: string
           role?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      solutions: {
+        Row: {
+          created_at: string | null
+          description: string
+          features: string[] | null
+          icon: string | null
+          id: string
+          popular: boolean | null
+          price: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          features?: string[] | null
+          icon?: string | null
+          id?: string
+          popular?: boolean | null
+          price: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          features?: string[] | null
+          icon?: string | null
+          id?: string
+          popular?: boolean | null
+          price?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }

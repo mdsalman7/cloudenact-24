@@ -1,12 +1,14 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Eye } from "lucide-react";
+import { Plus, Edit, Trash2 } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import {
   Table,
   TableBody,
@@ -18,6 +20,11 @@ import {
 
 const AdminBlogs = () => {
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     title: "",
     excerpt: "",
@@ -25,45 +32,129 @@ const AdminBlogs = () => {
     author: "",
     category: "",
     tags: "",
-    imageUrl: "",
+    image_url: "",
     status: "draft"
   });
 
-  const mockBlogs = [
-    {
-      id: 1,
-      title: "The Future of Cloud Computing in 2024",
-      author: "John Doe",
-      category: "Technology",
-      status: "Published",
-      views: 1234,
-      createdAt: "2024-01-15"
-    },
-    {
-      id: 2,
-      title: "Best Practices for Cloud Security",
-      author: "Jane Smith",
-      category: "Security",
-      status: "Draft",
-      views: 0,
-      createdAt: "2024-01-12"
-    }
-  ];
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchBlogs = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('blog_posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setBlogs(data || []);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch blog posts',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Blog data:", formData);
-    setShowForm(false);
+    if (!user) return;
+
+    const tagsArray = formData.tags.split(',').map(t => t.trim()).filter(t => t);
+    
+    try {
+      const blogData = {
+        ...formData,
+        tags: tagsArray,
+        user_id: user.id
+      };
+
+      let error;
+      if (editingId) {
+        const { error: updateError } = await supabase
+          .from('blog_posts')
+          .update(blogData)
+          .eq('id', editingId);
+        error = updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('blog_posts')
+          .insert([blogData]);
+        error = insertError;
+      }
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: `Blog post ${editingId ? 'updated' : 'created'} successfully`,
+      });
+
+      setShowForm(false);
+      setEditingId(null);
+      setFormData({
+        title: "",
+        excerpt: "",
+        content: "",
+        author: "",
+        category: "",
+        tags: "",
+        image_url: "",
+        status: "draft"
+      });
+      fetchBlogs();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save blog post',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleEdit = (blog: any) => {
     setFormData({
-      title: "",
-      excerpt: "",
-      content: "",
-      author: "",
-      category: "",
-      tags: "",
-      imageUrl: "",
-      status: "draft"
+      title: blog.title,
+      excerpt: blog.excerpt || "",
+      content: blog.content,
+      author: blog.author,
+      category: blog.category,
+      tags: blog.tags?.join(', ') || "",
+      image_url: blog.image_url || "",
+      status: blog.status
     });
+    setEditingId(blog.id);
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this blog post?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: 'Blog post deleted successfully',
+      });
+      fetchBlogs();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to delete blog post',
+        variant: 'destructive',
+      });
+    }
   };
 
   return (
@@ -85,7 +176,7 @@ const AdminBlogs = () => {
         {showForm && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Add New Blog Post</CardTitle>
+              <CardTitle>{editingId ? 'Edit' : 'Add New'} Blog Post</CardTitle>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -95,6 +186,7 @@ const AdminBlogs = () => {
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
                     placeholder="Blog post title"
+                    required
                   />
                 </div>
                 
@@ -105,6 +197,7 @@ const AdminBlogs = () => {
                       value={formData.author}
                       onChange={(e) => setFormData({...formData, author: e.target.value})}
                       placeholder="Author name"
+                      required
                     />
                   </div>
                   <div>
@@ -113,6 +206,7 @@ const AdminBlogs = () => {
                       value={formData.category}
                       onChange={(e) => setFormData({...formData, category: e.target.value})}
                       placeholder="Blog category"
+                      required
                     />
                   </div>
                   <div>
@@ -145,6 +239,7 @@ const AdminBlogs = () => {
                     onChange={(e) => setFormData({...formData, content: e.target.value})}
                     placeholder="Blog post content (supports Markdown)"
                     rows={8}
+                    required
                   />
                 </div>
                 
@@ -160,8 +255,8 @@ const AdminBlogs = () => {
                   <div>
                     <label className="block text-sm font-medium mb-1">Featured Image URL</label>
                     <Input
-                      value={formData.imageUrl}
-                      onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+                      value={formData.image_url}
+                      onChange={(e) => setFormData({...formData, image_url: e.target.value})}
                       placeholder="Image URL"
                     />
                   </div>
@@ -169,7 +264,20 @@ const AdminBlogs = () => {
 
                 <div className="flex space-x-4">
                   <Button type="submit">Save Blog Post</Button>
-                  <Button variant="outline" onClick={() => setShowForm(false)}>
+                  <Button variant="outline" onClick={() => {
+                    setShowForm(false);
+                    setEditingId(null);
+                    setFormData({
+                      title: "",
+                      excerpt: "",
+                      content: "",
+                      author: "",
+                      category: "",
+                      tags: "",
+                      image_url: "",
+                      status: "draft"
+                    });
+                  }}>
                     Cancel
                   </Button>
                 </div>
@@ -183,48 +291,56 @@ const AdminBlogs = () => {
             <CardTitle>Existing Blog Posts</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Author</TableHead>
-                  <TableHead>Category</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Views</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mockBlogs.map((blog) => (
-                  <TableRow key={blog.id}>
-                    <TableCell className="font-medium">{blog.title}</TableCell>
-                    <TableCell>{blog.author}</TableCell>
-                    <TableCell>{blog.category}</TableCell>
-                    <TableCell>
-                      <Badge variant={blog.status === "Published" ? "default" : "secondary"}>
-                        {blog.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{blog.views}</TableCell>
-                    <TableCell>{blog.createdAt}</TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="outline">
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
+            {loading ? (
+              <div className="text-center py-4">Loading...</div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Author</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Views</TableHead>
+                    <TableHead>Created</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {blogs.map((blog) => (
+                    <TableRow key={blog.id}>
+                      <TableCell className="font-medium">{blog.title}</TableCell>
+                      <TableCell>{blog.author}</TableCell>
+                      <TableCell>{blog.category}</TableCell>
+                      <TableCell>
+                        <Badge variant={blog.status === "published" ? "default" : "secondary"}>
+                          {blog.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{blog.views}</TableCell>
+                      <TableCell>{new Date(blog.created_at).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2">
+                          <Button size="sm" variant="outline" onClick={() => handleEdit(blog)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={() => handleDelete(blog.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {blogs.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={7} className="text-center py-4 text-gray-500">
+                        No blog posts found. Create your first one!
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            )}
           </CardContent>
         </Card>
       </div>
