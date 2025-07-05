@@ -2,11 +2,17 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Settings, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const AdminHeader = () => {
   const location = useLocation();
+  const { signOut, user } = useAuth();
   
   const isMainDashboard = location.pathname === "/admin";
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="bg-white shadow-sm border-b">
@@ -22,6 +28,11 @@ const AdminHeader = () => {
               <span className="text-xl font-bold text-gray-900">CloudEnact</span>
             </Link>
             <div className="text-sm text-gray-500">/ Admin Panel</div>
+            {user && (
+              <div className="text-sm text-gray-600">
+                Welcome, {user.email}
+              </div>
+            )}
           </div>
 
           <div className="flex items-center space-x-4">
@@ -43,6 +54,11 @@ const AdminHeader = () => {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Site
               </Link>
+            </Button>
+
+            <Button variant="outline" size="sm" onClick={handleSignOut}>
+              <LogOut className="h-4 w-4 mr-2" />
+              Sign Out
             </Button>
           </div>
         </div>
