@@ -13,7 +13,7 @@ const Auth = () => {
   const location = useLocation();
   const isAdminAuth = location.pathname.includes('admin') || location.state?.from?.includes('admin');
   
-  const [isLogin, setIsLogin] = useState(isAdminAuth ? true : true);
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,11 +42,16 @@ const Auth = () => {
           description: isLogin ? 'Signed in successfully!' : 'Account created successfully!',
         });
         
-        // Navigate based on where they came from
-        const redirectTo = isAdminAuth ? '/admin' : '/';
-        setTimeout(() => {
-          navigate(redirectTo);
-        }, 500);
+        // For admin auth, always redirect to admin dashboard
+        if (isAdminAuth) {
+          setTimeout(() => {
+            navigate('/admin');
+          }, 500);
+        } else {
+          setTimeout(() => {
+            navigate('/');
+          }, 500);
+        }
       }
     } catch (error) {
       toast({
@@ -121,8 +126,8 @@ const Auth = () => {
           )}
           
           <div className="mt-4 text-center">
-            <Button variant="outline" onClick={() => navigate('/')}>
-              Back to Home
+            <Button variant="outline" onClick={() => navigate(isAdminAuth ? '/admin' : '/')}>
+              {isAdminAuth ? 'Back to Admin' : 'Back to Home'}
             </Button>
           </div>
         </CardContent>

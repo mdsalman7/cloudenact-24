@@ -44,13 +44,6 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Auth Button */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button asChild variant="outline">
-              <Link to="/auth">Sign In</Link>
-            </Button>
-          </div>
-
           {/* Mobile menu button */}
           <div className="md:hidden">
             <Button
@@ -77,11 +70,6 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              <div className="pt-4 border-t">
-                <Button asChild variant="outline" className="w-full">
-                  <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
-                </Button>
-              </div>
             </div>
           </div>
         )}
