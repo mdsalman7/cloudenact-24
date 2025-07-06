@@ -84,7 +84,7 @@ const Index = () => {
             </div>
             <div className="lg:w-1/2">
               <img
-                src="/lovable-uploads/ecd8cf78-4418-4da3-acd6-f3e9577bbb74.png"
+                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
                 alt="Cloud Computing Solutions"
                 className="rounded-lg shadow-lg w-full h-auto"
               />
