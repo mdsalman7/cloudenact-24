@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Edit, Trash2, Eye } from "lucide-react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,7 +35,8 @@ const AdminCaseStudies = () => {
     duration: "",
     technologies: "",
     testimonial: "",
-    image_url: ""
+    image_url: "",
+    status: "draft"
   });
 
   useEffect(() => {
@@ -107,7 +109,8 @@ const AdminCaseStudies = () => {
         duration: "",
         technologies: "",
         testimonial: "",
-        image_url: ""
+        image_url: "",
+        status: "draft"
       });
       fetchCaseStudies();
     } catch (error) {
@@ -129,7 +132,8 @@ const AdminCaseStudies = () => {
       duration: caseStudy.duration || "",
       technologies: caseStudy.technologies?.join(', ') || "",
       testimonial: caseStudy.testimonial || "",
-      image_url: caseStudy.image_url || ""
+      image_url: caseStudy.image_url || "",
+      status: caseStudy.status || "draft"
     });
     setEditingId(caseStudy.id);
     setShowForm(true);
@@ -155,6 +159,29 @@ const AdminCaseStudies = () => {
       toast({
         title: 'Error',
         description: 'Failed to delete case study',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('case_studies')
+        .update({ status: newStatus })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Success',
+        description: `Case study ${newStatus === 'published' ? 'published' : 'saved as draft'}`,
+      });
+      fetchCaseStudies();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update status',
         variant: 'destructive',
       });
     }
@@ -218,6 +245,18 @@ const AdminCaseStudies = () => {
                       onChange={(e) => setFormData({...formData, duration: e.target.value})}
                       placeholder="Project duration"
                     />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Status</label>
+                    <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="draft">Draft</SelectItem>
+                        <SelectItem value="published">Published</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 
@@ -285,7 +324,8 @@ const AdminCaseStudies = () => {
                       duration: "",
                       technologies: "",
                       testimonial: "",
-                      image_url: ""
+                      image_url: "",
+                      status: "draft"
                     });
                   }}>
                     Cancel
@@ -322,9 +362,22 @@ const AdminCaseStudies = () => {
                       <TableCell>{study.client}</TableCell>
                       <TableCell>{study.industry}</TableCell>
                       <TableCell>
-                        <Badge variant={study.status === "published" ? "default" : "secondary"}>
-                          {study.status}
-                        </Badge>
+                        <Select 
+                          value={study.status || "draft"} 
+                          onValueChange={(value) => handleStatusChange(study.id, value)}
+                        >
+                          <SelectTrigger className="w-32">
+                            <SelectValue>
+                              <Badge variant={study.status === "published" ? "default" : "secondary"}>
+                                {study.status || "draft"}
+                              </Badge>
+                            </SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="draft">Draft</SelectItem>
+                            <SelectItem value="published">Published</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </TableCell>
                       <TableCell>{new Date(study.created_at).toLocaleDateString()}</TableCell>
                       <TableCell>
