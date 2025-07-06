@@ -8,23 +8,23 @@ const About = () => {
   const values = [
     {
       icon: Target,
-      title: "Excellence",
-      description: "We strive for excellence in every project, delivering solutions that exceed expectations."
-    },
-    {
-      icon: Users,
-      title: "Collaboration",
-      description: "We work closely with our clients as trusted partners in their digital transformation journey."
-    },
-    {
-      icon: Lightbulb,
       title: "Innovation",
-      description: "We embrace cutting-edge technologies and innovative approaches to solve complex challenges."
+      description: "We challenge the status quo with creative, forward-thinking solutions."
     },
     {
       icon: Award,
       title: "Integrity",
-      description: "We maintain the highest standards of integrity and transparency in all our interactions."
+      description: "Transparency and accountability in everything we do."
+    },
+    {
+      icon: Users,
+      title: "Customer-Centricity",
+      description: "Your goals shape our strategies and drive our solutions."
+    },
+    {
+      icon: Lightbulb,
+      title: "Excellence",
+      description: "Delivering high-performance solutions with quality and precision."
     }
   ];
 
@@ -57,10 +57,14 @@ const About = () => {
       <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">About CloudCompass</h1>
+            <h1 className="text-5xl font-bold text-gray-900 mb-6">About CloudEnact</h1>
             <p className="text-xl text-gray-600 mb-8">
-              We are a team of passionate cloud experts dedicated to helping businesses 
-              navigate their digital transformation journey with confidence and success.
+              At CloudEnact, we turn cloud complexity into clarity. We help startups, SMEs, and enterprises 
+              confidently navigate their cloud journey with end-to-end consulting, migration, and DevOps services 
+              across AWS, Azure, and Google Cloud.
+            </p>
+            <p className="text-lg text-gray-600">
+              Your success in the cloud isn't just possible — it's enacted.
             </p>
           </div>
         </div>
@@ -74,21 +78,21 @@ const About = () => {
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
               <div className="space-y-4 text-gray-600">
                 <p>
-                  Founded in 2018, CloudCompass was born from a simple observation: businesses 
-                  were struggling to navigate the complex world of cloud computing. Our founders, 
-                  seasoned cloud architects with decades of combined experience, saw an opportunity 
-                  to bridge this gap.
+                  At CloudEnact, we empower businesses to unlock their full potential through intelligent 
+                  cloud solutions. Founded on the principles of agility, innovation, and trust, we specialize 
+                  in transforming traditional IT infrastructures into scalable, secure, and cost-efficient 
+                  cloud environments.
                 </p>
                 <p>
-                  What started as a small consulting firm has grown into a trusted partner for 
-                  companies of all sizes. We've helped over 500 organizations successfully 
-                  migrate to the cloud, optimize their operations, and achieve their digital 
-                  transformation goals.
+                  With deep expertise in AWS, Azure, Google Cloud, and hybrid cloud ecosystems, our team 
+                  delivers tailored consulting, migration, and optimization services that align with your 
+                  unique business goals. Whether you're a startup embracing digital growth or an enterprise 
+                  modernizing legacy systems, we enact seamless cloud transformations that drive results.
                 </p>
                 <p>
-                  Today, CloudCompass stands as a leader in cloud consulting, known for our 
-                  technical expertise, personalized approach, and unwavering commitment to 
-                  client success.
+                  What sets us apart is our commitment to action — we don't just design strategies; we 
+                  implement them. From architecture planning to DevOps automation and continuous monitoring, 
+                  CloudEnact provides end-to-end cloud enablement with measurable impact.
                 </p>
               </div>
             </div>
@@ -111,9 +115,8 @@ const About = () => {
               <CardContent className="p-8">
                 <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h3>
                 <p className="text-gray-600 text-lg">
-                  To empower businesses with cutting-edge cloud solutions that drive innovation, 
-                  efficiency, and growth. We believe every organization deserves access to 
-                  world-class cloud expertise to achieve their digital transformation goals.
+                  To help businesses thrive in the cloud era by delivering reliable, scalable, 
+                  and future-ready cloud solutions that drive measurable outcomes and long-term success.
                 </p>
               </CardContent>
             </Card>
@@ -122,9 +125,8 @@ const About = () => {
               <CardContent className="p-8">
                 <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Vision</h3>
                 <p className="text-gray-600 text-lg">
-                  To be the global leader in cloud consulting, recognized for our innovation, 
-                  expertise, and the transformative impact we create for our clients. We envision 
-                  a future where every business can harness the full power of the cloud.
+                  To be the most trusted partner for organizations navigating digital transformation 
+                  through the cloud, recognized for our innovation, expertise, and transformative impact.
                 </p>
               </CardContent>
             </Card>
@@ -136,7 +138,7 @@ const About = () => {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Values</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Core Values</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               These core values guide everything we do and shape how we serve our clients
             </p>
@@ -156,8 +158,29 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* AWS Partnership Section */}
       <section className="py-20 bg-blue-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-gray-900 mb-8">AWS Select Tier Partner</h2>
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              As an AWS Select Tier Partner, we demonstrate proven technical expertise and customer success 
+              in delivering AWS cloud solutions. This partnership validates our commitment to excellence 
+              and provides our clients with additional benefits and support.
+            </p>
+            <div className="flex justify-center">
+              <img 
+                src="/lovable-uploads/61375615-6fde-4030-befa-dd906c44a262.png" 
+                alt="AWS Partner Select Tier Services" 
+                className="h-32 w-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Meet Our Leadership</h2>

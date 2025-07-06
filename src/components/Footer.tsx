@@ -28,11 +28,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-blue-400" />
-                <span className="text-sm">+1 (555) 123-4567</span>
+                <span className="text-sm">+91-8987746892</span>
               </div>
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4 text-blue-400" />
-                <span className="text-sm">123 Cloud Street, Tech City, TC 12345</span>
+                <span className="text-sm">2nd Floor, Kanti Factory Rd, above Drug Point, near Bank of Baroda, New Colony, Mahatma Gandhi Nagar, Kankarbagh, Patna, Bihar 800020</span>
               </div>
             </div>
           </div>
