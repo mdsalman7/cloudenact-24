@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,7 +10,10 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 
 const Auth = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const isAdminAuth = location.pathname.includes('admin') || location.state?.from?.includes('admin');
+  
+  const [isLogin, setIsLogin] = useState(isAdminAuth ? true : true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,9 +41,11 @@ const Auth = () => {
           title: 'Success',
           description: isLogin ? 'Signed in successfully!' : 'Account created successfully!',
         });
-        // Navigate to admin immediately after successful auth
+        
+        // Navigate based on where they came from
+        const redirectTo = isAdminAuth ? '/admin' : '/';
         setTimeout(() => {
-          navigate('/admin');
+          navigate(redirectTo);
         }, 500);
       }
     } catch (error) {
@@ -66,7 +71,10 @@ const Auth = () => {
             />
           </div>
           <CardTitle className="text-2xl">
-            {isLogin ? 'Sign In to Admin Panel' : 'Create Admin Account'}
+            {isAdminAuth 
+              ? 'Admin Panel Sign In' 
+              : (isLogin ? 'Sign In' : 'Create Account')
+            }
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -100,15 +108,17 @@ const Auth = () => {
             </Button>
           </form>
           
-          <div className="mt-4 text-center">
-            <Button 
-              variant="ghost" 
-              onClick={() => setIsLogin(!isLogin)}
-              disabled={loading}
-            >
-              {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-            </Button>
-          </div>
+          {!isAdminAuth && (
+            <div className="mt-4 text-center">
+              <Button 
+                variant="ghost" 
+                onClick={() => setIsLogin(!isLogin)}
+                disabled={loading}
+              >
+                {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+              </Button>
+            </div>
+          )}
           
           <div className="mt-4 text-center">
             <Button variant="outline" onClick={() => navigate('/')}>

@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import { Cloud, Shield, Zap, Database, Settings, Users, ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -6,11 +7,38 @@ import { Badge } from "@/components/ui/badge";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const Solutions = () => {
-  const solutions = [
+  const [solutions, setSolutions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSolutions();
+  }, []);
+
+  const fetchSolutions = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('solutions')
+        .select('*')
+        .eq('status', 'active')
+        .order('popular', { ascending: false });
+
+      if (error) throw error;
+      setSolutions(data || []);
+    } catch (error) {
+      console.error('Error fetching solutions:', error);
+      // Fallback to static data if database fails
+      setSolutions(getStaticSolutions());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStaticSolutions = () => [
     {
-      icon: Cloud,
+      icon: "Cloud",
       title: "Cloud Migration Services",
       description: "Seamlessly migrate your applications and data to the cloud with minimal downtime.",
       features: ["Assessment & Planning", "Lift & Shift Migration", "Re-architecting", "Hybrid Cloud Setup"],
@@ -18,7 +46,7 @@ const Solutions = () => {
       popular: false
     },
     {
-      icon: Shield,
+      icon: "Shield",
       title: "Cloud Security & Compliance",
       description: "Comprehensive security solutions to protect your cloud infrastructure and ensure compliance.",
       features: ["Security Audits", "Compliance Framework", "Identity Management", "24/7 Monitoring"],
@@ -26,38 +54,21 @@ const Solutions = () => {
       popular: true
     },
     {
-      icon: Zap,
+      icon: "Zap",
       title: "DevOps & Automation",
       description: "Streamline your development processes with advanced DevOps practices and automation.",
       features: ["CI/CD Pipelines", "Infrastructure as Code", "Container Orchestration", "Monitoring & Logging"],
       price: "Starting at $8,000",
       popular: false
-    },
-    {
-      icon: Database,
-      title: "Data Analytics & AI",
-      description: "Unlock insights from your data with advanced analytics and machine learning solutions.",
-      features: ["Data Lake Architecture", "Real-time Analytics", "ML Model Deployment", "Business Intelligence"],
-      price: "Starting at $15,000",
-      popular: false
-    },
-    {
-      icon: Settings,
-      title: "Cloud Optimization",
-      description: "Optimize your cloud resources for maximum performance and cost efficiency.",
-      features: ["Cost Analysis", "Performance Tuning", "Resource Right-sizing", "Multi-cloud Strategy"],
-      price: "Starting at $3,000",
-      popular: false
-    },
-    {
-      icon: Users,
-      title: "Managed Cloud Services",
-      description: "Complete cloud management and support services for your peace of mind.",
-      features: ["24/7 Support", "Proactive Monitoring", "Backup & Recovery", "Maintenance & Updates"],
-      price: "Starting at $2,000/month",
-      popular: false
     }
   ];
+
+  const getIconComponent = (iconName: string) => {
+    const icons: { [key: string]: any } = {
+      Cloud, Shield, Zap, Database, Settings, Users
+    };
+    return icons[iconName] || Cloud;
+  };
 
   const industries = [
     { name: "Healthcare", description: "HIPAA-compliant cloud solutions for healthcare providers" },
@@ -101,36 +112,45 @@ const Solutions = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {solutions.map((solution, index) => (
-              <Card key={index} className={`relative hover:shadow-xl transition-all duration-300 ${solution.popular ? 'ring-2 ring-blue-500' : ''}`}>
-                {solution.popular && (
-                  <Badge className="absolute -top-3 left-6 bg-blue-600">Most Popular</Badge>
-                )}
-                <CardHeader className="text-center pb-4">
-                  <solution.icon className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                  <h3 className="text-2xl font-semibold mb-2">{solution.title}</h3>
-                  <p className="text-gray-600">{solution.description}</p>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <ul className="space-y-2 mb-6">
-                    {solution.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center text-sm">
-                        <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="text-center border-t pt-4">
-                    <div className="text-2xl font-bold text-blue-600 mb-4">{solution.price}</div>
-                    <Button asChild className="w-full">
-                      <Link to="/contact">Learn More</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="text-gray-500">Loading solutions...</div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {solutions.map((solution, index) => {
+                const IconComponent = getIconComponent(solution.icon);
+                return (
+                  <Card key={solution.id || index} className={`relative hover:shadow-xl transition-all duration-300 ${solution.popular ? 'ring-2 ring-blue-500' : ''}`}>
+                    {solution.popular && (
+                      <Badge className="absolute -top-3 left-6 bg-blue-600">Most Popular</Badge>
+                    )}
+                    <CardHeader className="text-center pb-4">
+                      <IconComponent className="h-12 w-12 text-blue-600 mx-auto mb-4" />
+                      <h3 className="text-2xl font-semibold mb-2">{solution.title}</h3>
+                      <p className="text-gray-600">{solution.description}</p>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <ul className="space-y-2 mb-6">
+                        {(solution.features || []).map((feature: string, featureIndex: number) => (
+                          <li key={featureIndex} className="flex items-center text-sm">
+                            <CheckCircle className="h-4 w-4 text-green-500 mr-2 flex-shrink-0" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="text-center border-t pt-4">
+                        <div className="text-2xl font-bold text-blue-600 mb-4">{solution.price}</div>
+                        <Button asChild className="w-full">
+                          <Link to="/contact">Learn More</Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
