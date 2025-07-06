@@ -11,7 +11,8 @@ import { Loader2 } from 'lucide-react';
 
 const Auth = () => {
   const location = useLocation();
-  const isAdminAuth = location.pathname.includes('admin') || location.state?.from?.includes('admin');
+  const navigate = useNavigate();
+  const isAdminAuth = location.pathname === '/admin/auth' || location.pathname.includes('admin');
   
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
@@ -19,7 +20,6 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,15 +42,11 @@ const Auth = () => {
           description: isLogin ? 'Signed in successfully!' : 'Account created successfully!',
         });
         
-        // For admin auth, always redirect to admin dashboard
+        // For admin routes, redirect to admin dashboard
         if (isAdminAuth) {
-          setTimeout(() => {
-            navigate('/admin');
-          }, 500);
+          navigate('/admin', { replace: true });
         } else {
-          setTimeout(() => {
-            navigate('/');
-          }, 500);
+          navigate('/', { replace: true });
         }
       }
     } catch (error) {
@@ -126,7 +122,10 @@ const Auth = () => {
           )}
           
           <div className="mt-4 text-center">
-            <Button variant="outline" onClick={() => navigate(isAdminAuth ? '/admin' : '/')}>
+            <Button 
+              variant="outline" 
+              onClick={() => navigate(isAdminAuth ? '/admin' : '/')}
+            >
               {isAdminAuth ? 'Back to Admin' : 'Back to Home'}
             </Button>
           </div>

@@ -39,6 +39,7 @@ const App = () => (
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/admin/auth" element={<Auth />} />
             <Route path="/admin" element={
               <ProtectedRoute requireAdmin>
                 <AdminDashboard />

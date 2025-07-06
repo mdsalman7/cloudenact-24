@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2 } from 'lucide-react';
 
@@ -12,20 +12,26 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps) => {
   const { user, loading, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!loading) {
       if (!user) {
-        navigate('/auth');
+        // If this is an admin route, redirect to admin auth
+        if (requireAdmin) {
+          navigate('/admin/auth', { state: { from: location.pathname } });
+        } else {
+          navigate('/auth');
+        }
         return;
       }
       
       if (requireAdmin && !isAdmin) {
-        navigate('/auth');
+        navigate('/admin/auth', { state: { from: location.pathname } });
         return;
       }
     }
-  }, [user, loading, isAdmin, requireAdmin, navigate]);
+  }, [user, loading, isAdmin, requireAdmin, navigate, location.pathname]);
 
   if (loading) {
     return (
