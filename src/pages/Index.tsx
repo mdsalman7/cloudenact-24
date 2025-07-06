@@ -1,4 +1,5 @@
 
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -83,7 +84,7 @@ const Index = () => {
             </div>
             <div className="lg:w-1/2">
               <img
-                src="/lovable-uploads/58a76519-3320-4263-886d-9ffbbaaca398.png"
+                src="/lovable-uploads/ecd8cf78-4418-4da3-acd6-f3e9577bbb74.png"
                 alt="Cloud Computing Solutions"
                 className="rounded-lg shadow-lg w-full h-auto"
               />
@@ -190,3 +191,4 @@ const Index = () => {
 };
 
 export default Index;
+
