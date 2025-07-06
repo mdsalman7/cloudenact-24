@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -54,32 +53,32 @@ const Contact = () => {
     {
       icon: Mail,
       title: "Email Us",
-      content: "contact@cloudcompass.com",
+      content: "contact@cloudenact.com",
       description: "Send us an email anytime!"
     },
     {
       icon: Phone,
       title: "Call Us",
-      content: "+1 (555) 123-4567",
-      description: "Mon-Fri from 8am to 6pm EST"
+      content: "+91-8987746892",
+      description: "Mon-Fri from 9:30 AM to 6:30 PM IST"
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      content: "123 Cloud Street, Tech City, TC 12345",
+      content: "2nd Floor, Kanti Factory Rd, above Drug Point, near Bank of Baroda, New Colony, Mahatma Gandhi Nagar, Kankarbagh, Patna, Bihar 800020",
       description: "Come say hello at our office"
     },
     {
       icon: Clock,
       title: "Business Hours",
-      content: "Mon-Fri: 8AM - 6PM EST",
+      content: "Mon-Fri: 9:30 AM - 6:30 PM IST",
       description: "We're here to help during business hours"
     }
   ];
 
   const services = [
     "Cloud Migration",
-    "DevOps Consulting",
+    "DevOps Consulting", 
     "Security & Compliance",
     "Data Analytics",
     "Cost Optimization",
@@ -172,7 +171,7 @@ const Contact = () => {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => handleInputChange("phone", e.target.value)}
-                        placeholder="+1 (555) 123-4567"
+                        placeholder="+91 XXXXXXXXXX"
                       />
                     </div>
                   </div>
@@ -249,7 +248,7 @@ const Contact = () => {
               {/* Why Choose Us */}
               <Card className="bg-blue-50 border-blue-200">
                 <CardContent className="p-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Choose CloudCompass?</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Why Choose CloudEnact?</h3>
                   <ul className="space-y-3">
                     {benefits.map((benefit, index) => (
                       <li key={index} className="flex items-start">
