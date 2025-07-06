@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -82,9 +83,9 @@ const Index = () => {
             </div>
             <div className="lg:w-1/2">
               <img
-                src="/lovable-uploads/f5eb9974-4444-48c3-b974-e4ca3c58c497.png"
-                alt="Cloud Solutions"
-                className="rounded-lg shadow-lg"
+                src="/lovable-uploads/58a76519-3320-4263-886d-9ffbbaaca398.png"
+                alt="Cloud Computing Solutions"
+                className="rounded-lg shadow-lg w-full h-auto"
               />
             </div>
           </div>
