@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { IMAGES, getUnsplashImage, isExternalUrl } from "@/config/images";
 
 const CaseStudies = () => {
   const [caseStudies, setCaseStudies] = useState<any[]>([]);
@@ -44,7 +45,7 @@ const CaseStudies = () => {
       challenge: "Legacy infrastructure causing frequent downtime and limiting scalability during peak seasons.",
       solution: "Complete migration to AWS with auto-scaling, containerization, and CDN implementation.",
       results: [],
-      image_url: "photo-1498050108023-c5249f4df085",
+      image_url: IMAGES.PLACEHOLDER_UNSPLASH.ECOMMERCE_TECH,
       testimonial: "CloudCompass transformed our entire infrastructure. We can now handle Black Friday traffic without breaking a sweat.",
       duration: "3 months",
       technologies: ["AWS", "Docker", "Kubernetes", "CloudFront"]
@@ -113,9 +114,9 @@ const CaseStudies = () => {
                   <div className="grid grid-cols-1 lg:grid-cols-2">
                     <div className="relative">
                       <img 
-                        src={study.image_url?.startsWith('http') 
+                        src={isExternalUrl(study.image_url) 
                           ? study.image_url 
-                          : `https://images.unsplash.com/${study.image_url || 'photo-1498050108023-c5249f4df085'}?auto=format&fit=crop&w=600&q=80`
+                          : getUnsplashImage(study.image_url || IMAGES.PLACEHOLDER_UNSPLASH.BLOG_DEFAULT, 600, 400)
                         }
                         alt={study.title}
                         className="w-full h-full object-cover min-h-[400px]"

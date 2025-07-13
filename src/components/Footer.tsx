@@ -1,6 +1,6 @@
-
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { IMAGES } from "@/config/images";
 
 const Footer = () => {
   return (
@@ -11,8 +11,8 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <img 
-                src="/lovable-uploads/a01c04ae-3773-4c9c-8ef1-c9a540728e2d.png" 
-                alt="CloudEnact Logo" 
+                src={IMAGES.LOGO.url}
+                alt={IMAGES.LOGO.alt}
                 className="h-8 w-8"
               />
               <span className="text-xl font-bold">CloudEnact</span>

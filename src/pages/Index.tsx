@@ -1,5 +1,3 @@
-
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +5,7 @@ import { ArrowRight, CheckCircle, Users, Award, TrendingUp, Cloud, Shield, Zap, 
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { IMAGES } from "@/config/images";
 
 const Index = () => {
   const stats = [
@@ -84,8 +83,8 @@ const Index = () => {
             </div>
             <div className="lg:w-1/2">
               <img
-                src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-                alt="Cloud Computing Solutions"
+                src={IMAGES.HERO_CLOUD_COMPUTING.url}
+                alt={IMAGES.HERO_CLOUD_COMPUTING.alt}
                 className="rounded-lg shadow-lg w-full h-auto"
               />
             </div>
@@ -191,4 +190,3 @@ const Index = () => {
 };
 
 export default Index;
-

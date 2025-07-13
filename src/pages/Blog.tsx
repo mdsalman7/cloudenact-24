@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { IMAGES, getUnsplashImage, isExternalUrl } from "@/config/images";
 
 const Blog = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -75,9 +76,9 @@ const Blog = () => {
                   {post.image_url && (
                     <div className="aspect-video overflow-hidden">
                       <img 
-                        src={post.image_url.startsWith('http') 
+                        src={isExternalUrl(post.image_url) 
                           ? post.image_url 
-                          : `https://images.unsplash.com/${post.image_url}?auto=format&fit=crop&w=600&q=80`
+                          : getUnsplashImage(post.image_url, 600, 400)
                         }
                         alt={post.title}
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"

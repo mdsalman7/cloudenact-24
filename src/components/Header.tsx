@@ -1,8 +1,8 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { IMAGES } from "@/config/images";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,8 +24,8 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <img 
-              src="/lovable-uploads/a01c04ae-3773-4c9c-8ef1-c9a540728e2d.png" 
-              alt="CloudEnact Logo" 
+              src={IMAGES.LOGO.url}
+              alt={IMAGES.LOGO.alt}
               className="h-8 w-8"
             />
             <span className="text-xl font-bold text-gray-900">CloudEnact</span>
