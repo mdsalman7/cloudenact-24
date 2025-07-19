@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { IMAGES } from "@/config/images";
 
 const Header = () => {
@@ -18,7 +19,7 @@ const Header = () => {
   ];
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-background border-b shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -28,7 +29,7 @@ const Header = () => {
               alt={IMAGES.LOGO.alt}
               className="h-8 w-8"
             />
-            <span className="text-xl font-bold text-gray-900">CloudEnact</span>
+            <span className="text-xl font-bold text-foreground">CloudEnact</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -37,15 +38,17 @@ const Header = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors"
+                className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm font-medium transition-colors"
               >
                 {item.name}
               </Link>
             ))}
+            <ThemeToggle />
           </nav>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
@@ -64,7 +67,7 @@ const Header = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className="text-gray-600 hover:text-gray-900 block px-3 py-2 text-base font-medium"
+                  className="text-muted-foreground hover:text-foreground block px-3 py-2 text-base font-medium"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
